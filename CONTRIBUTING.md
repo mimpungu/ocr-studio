@@ -9,7 +9,7 @@ Merci pour votre intérêt pour **OCR Studio** (réalisé par **Deo Mimpungu**).
 Assurez-vous d'avoir **Python >= 3.10** installé, puis configurez l'environnement virtuel avec les dépendances de développement et de test :
 
 ```bash
-git clone <url-du-depot>
+git clone https://github.com/mimpungu/ocr-studio.git
 cd ocr-studio
 
 python3 -m venv .venv
