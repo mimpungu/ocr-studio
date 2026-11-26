@@ -1,0 +1,145 @@
+# ==============================================================================
+# Python & Packaging
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==============================================================================
+# Environnements virtuels
+# ==============================================================================
+.venv/
+venv/
+ENV/
+env/
+.envrc
+
+# ==============================================================================
+# Variables d'environnement, secrets & certificats
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+secrets.*
+credentials.*
+
+# ==============================================================================
+# Tests, couverture & outils d'analyse
+# ==============================================================================
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pytype/
+.pyre/
+
+# ==============================================================================
+# Données OCR, modèles, caches, uploads, exports & fichiers temporaires
+# ==============================================================================
+data/
+datasets/
+samples/
+uploads/
+outputs/
+exports/
+results/
+tmp/
+temp/
+cache/
+.cache/
+models/
+weights/
+checkpoints/
+*.onnx
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Documents et images de test / exports utilisateur (hors assets statiques)
+*.pdf
+*.docx
+*.doc
+*.csv
+*.xlsx
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.tiff
+*.tif
+*.bmp
+!ocr_studio/static/**
+
+# Bases de données & état local
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+
+# ==============================================================================
+# Logs & exécution
+# ==============================================================================
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# ==============================================================================
+# IDE & Éditeurs
+# ==============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ==============================================================================
+# Système (macOS, Windows, Linux)
+# ==============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini

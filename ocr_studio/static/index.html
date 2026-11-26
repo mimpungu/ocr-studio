@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OCR Studio · Éditeur &amp; Moteur OCR Haute Précision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark-badge">OCR</span>
+      <span>OCR Studio</span>
+      <span class="sep">/</span>
+      <span class="prod">Privé &amp; Éditable</span>
+    </div>
+    <span class="ver">v0.1.0</span>
+    <div class="sp"></div>
+    <nav class="exports">
+      <span class="exp-formats">PDF · Word · Image · Markdown · Texte · JSON</span>
+      <div class="export-wrap">
+        <button id="exportBtn" class="exp-btn cta" disabled>Export ▾</button>
+        <div id="exportMenu" class="export-menu hidden">
+          <button class="exp-opt" data-fmt="edited-pdf">PDF</button>
+          <button class="exp-opt" data-fmt="docx">Word</button>
+          <button class="exp-opt" data-fmt="png">Image</button>
+          <button class="exp-opt" data-fmt="md">Markdown</button>
+          <button class="exp-opt" data-fmt="txt">Texte</button>
+          <button class="exp-opt" data-fmt="json">JSON</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <aside>
+      <div>
+        <div id="drop">
+          <b>Déposer un PDF ou une image</b>
+          <span>ou cliquer pour choisir un fichier</span>
+          <input id="fileInput" type="file" accept=".pdf,image/*" hidden />
+        </div>
+        <div id="fname"></div>
+      </div>
+
+      <div class="group">
+        <div class="label">Source</div>
+        <div class="seg" id="modeSeg">
+          <button data-v="auto" class="on">Auto</button>
+          <button data-v="ocr">OCR</button>
+          <button data-v="text">Couche texte</button>
+        </div>
+        <div class="hint" id="modeHint">Lit la couche texte du PDF si elle est fiable, sinon OCR visuel.</div>
+      </div>
+
+      <div class="group">
+        <div class="label">Pipeline &amp; Précision</div>
+        <label class="sw">Haute précision FR / Tableaux<input type="checkbox" id="postprocessChk" checked /></label>
+        <label class="sw">Scan difficile (CLAHE)<input type="checkbox" id="enhanceScanChk" /></label>
+        <label class="sw">Photo téléphone (ombres)<input type="checkbox" id="photoModeChk" /></label>
+        <label class="sw">Math en LaTeX<input type="checkbox" id="mathChk" /></label>
+        <label class="sw">Garder en-têtes / pieds<input type="checkbox" id="furnitureChk" /></label>
+        <div class="row2">
+          <div class="field">
+            <span class="label">DPI</span>
+            <select id="dpiSelect">
+              <option value="150">150</option>
+              <option value="200" selected>200</option>
+              <option value="300">300</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="label">Re-OCR Zone</span>
+            <button type="button" class="btn-outline" id="regionToolBtn" disabled>✂️ Sélection</button>
+          </div>
+        </div>
+        <button class="btn" id="reprocessBtn" disabled>Relire avec ces options</button>
+      </div>
+
+      <div class="group">
+        <div class="label">Édition &amp; RGPD</div>
+        <div class="find-box">
+          <input type="text" id="findInput" placeholder="Rechercher..." />
+          <input type="text" id="replaceInput" placeholder="Remplacer par..." />
+          <div class="row2">
+            <button type="button" class="btn-outline small" id="replaceAllBtn" disabled>Remplacer tout</button>
+            <button type="button" class="btn-outline small" id="undoBtn" disabled>↶ Annuler</button>
+          </div>
+        </div>
+        <button type="button" class="btn-outline" id="anonymizeBtn" disabled>🔒 Anonymiser (RGPD)</button>
+      </div>
+
+      <div class="group">
+        <div class="label">Champs détectés</div>
+        <div id="entitiesBox" class="hint">Aucun champ extrait.</div>
+      </div>
+
+      <div class="group">
+        <div class="label">Affichage</div>
+        <label class="sw"><span><i class="dot" style="background:oklch(55% .15 263)"></i>Lignes</span><input type="checkbox" id="showLinesChk" /></label>
+        <label class="sw"><span><i class="dot" style="background:oklch(58% .15 145)"></i>Blocs de mise en page</span><input type="checkbox" id="showBlocksChk" checked /></label>
+        <label class="sw"><span><i class="dot" style="background:oklch(48% .014 263)"></i>Labels des blocs</span><input type="checkbox" id="showLabelsChk" checked /></label>
+        <label class="sw"><span><i class="dot" style="background:oklch(60% .2 30)"></i>Ordre de lecture</span><input type="checkbox" id="showOrderChk" /></label>
+      </div>
+
+      <div class="group">
+        <div class="label">Résumé</div>
+        <div id="stats" class="muted">Aucun document chargé.</div>
+        <div id="status"></div>
+      </div>
+    </aside>
+
+    <main id="mainArea">
+      <div class="empty" id="emptyState">
+        <h2>Déposez un PDF ou une image</h2>
+        <p>Traitement 100 % local sur CPU · Édition directe des blocs et tableaux · Export Word, PDF Searchable, CSV, Markdown.</p>
+      </div>
+      <div id="pagesContainer" class="pages-container hidden"></div>
+    </main>
+  </div>
+
+  <!-- Modale résultat Re-OCR zone -->
+  <div id="regionModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Re-OCR ciblé (upscale x2 + contraste)</h3>
+        <button id="closeRegionModal" class="btn-outline small">✕</button>
+      </div>
+      <p id="regionMeta" class="hint"></p>
+      <textarea id="regionResultText" rows="6"></textarea>
+      <div class="modal-actions">
+        <button id="copyRegionBtn" class="btn-outline">Copier</button>
+        <button id="insertRegionBlockBtn" class="btn">Ajouter comme bloc</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
